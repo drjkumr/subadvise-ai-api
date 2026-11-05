@@ -38,6 +38,7 @@ The API documentation UI is available at `/docs` and the OpenAPI document at
 
 | Method | FastAPI path | Purpose |
 | --- | --- | --- |
+| `GET` | `/api/health` | Check that the API is running. |
 | `POST` | `/api/assistant/chat` | Ask a question or stage a confirmed subscription/expense change. |
 | `POST` | `/api/assistant/sessions` | Create an empty chat session. |
 | `GET` | `/api/assistant/sessions/{session_id}` | Retrieve a session and its complete ordered message history. |

@@ -28,10 +28,18 @@ Conversation JSON files and the local ChromaDB index are stored under
 `data/chat_history` and `data/chroma_db` inside this project by default. Set
 `CHAT_HISTORY_DIR` and `CHAT_VECTOR_DIR` to use different persistent locations.
 JSON is the source of truth for full transcripts; each message is also indexed
-in ChromaDB for semantic recall. The default Chroma embedding function may
-download its model on the first message that is indexed. Keep both directories
-on persistent, access-controlled storage because they contain conversation
-content.
+in ChromaDB for semantic recall. ChromaDB's default embedding function uses the
+`all-MiniLM-L6-v2` sentence-transformer model to turn messages and search
+queries into vectors. The model may be downloaded the first time a message is
+indexed, so the first indexing request can take longer and needs network access.
+
+Embedding and vector search are local workloads: a capable, multi-core CPU and
+enough memory help keep indexing and searches responsive, especially under
+multiple concurrent requests. A GPU or NPU can help only when the installed
+embedding runtime and drivers support it and the application is configured to
+use that accelerator; the current default ChromaDB setup does not enable GPU or
+NPU acceleration automatically. Keep both data directories on persistent,
+access-controlled storage because they contain conversation content.
 
 ## Get a Groq API key
 
@@ -144,6 +152,7 @@ The example writes separate demo data under `data\demo_chat_history` and
 
 ## API overview
 
+- `GET /api/health` — check that the API is running.
 - `POST /api/assistant/chat` — ask the Groq `openai/gpt-oss-120b` assistant.
 - `POST /api/assistant/sessions` — create a chat session.
 - `GET /api/assistant/sessions/{session_id}` — retrieve the full session.

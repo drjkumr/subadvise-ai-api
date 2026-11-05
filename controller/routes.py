@@ -24,6 +24,11 @@ from service.subadvise_api_client import proxy_get, proxy_patch, proxy_post, pro
 router = APIRouter()
 
 
+@router.get("/api/health")
+async def health() -> dict[str, str]:
+    return {"status": "UP"}
+
+
 class AssistantChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=12000)
     session_id: UUID | None = None
