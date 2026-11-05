@@ -413,6 +413,28 @@ async def get_subscriptions(request: Request) -> Response:
 
 
 @router.get(
+    "/api/subscriptions/search",
+    summary="Search subscriptions by name",
+    tags=["Subscriptions"],
+)
+async def search_subscriptions_by_name(
+    request: Request,
+    name: str = Query(min_length=1),
+) -> Response:
+    name = name.strip()
+    if not name:
+        raise HTTPException(
+            status_code=422,
+            detail="name must not be blank.",
+        )
+    return await proxy_get(
+        request,
+        "/api/subscriptions/search",
+        {"name": name},
+    )
+
+
+@router.get(
     "/api/subscriptions/filter/subscription-date",
     summary="Filter subscriptions by subscription date",
     tags=["Subscriptions"],
@@ -632,6 +654,15 @@ async def invoke_assistant_tool(
         if name == "get_all_subscriptions":
             _require_arguments(arguments, set())
             response = await get_subscriptions(request)
+        elif name == "search_subscriptions_by_name":
+            _require_arguments(arguments, {"name"})
+            subscription_name = arguments["name"]
+            if not isinstance(subscription_name, str) or not subscription_name.strip():
+                raise ValueError("The name must not be blank.")
+            response = await search_subscriptions_by_name(
+                request,
+                subscription_name,
+            )
         elif name == "get_subscription_by_id":
             _require_arguments(arguments, {"subscription_id"})
             response = await get_subscription_by_id(

@@ -48,6 +48,7 @@ The API documentation UI is available at `/docs` and the OpenAPI document at
 | `GET` | `/api/assistant/history/search` | Semantically search indexed history, optionally within a session. |
 | `PUT` | `/api/settings/groq-api-key` | Replace the in-memory Groq key; requires the current key as a bearer token. |
 | `GET` | `/api/subscriptions` | Get all subscriptions. |
+| `GET` | `/api/subscriptions/search?name=netflix` | Search subscription names by case-insensitive substring. |
 | `GET` | `/api/subscriptions/{subscription_id}` | Get a subscription by UUID. |
 | `PATCH` | `/api/subscriptions/{subscription_id}` | Partially update a subscription. |
 | `GET` | `/api/subscriptions/filter/subscription-date` | Filter by exact subscription date. |
@@ -351,6 +352,21 @@ match the Java API.
 #### `GET /api/subscriptions`
 
 Returns all saved subscriptions.
+
+#### `GET /api/subscriptions/search`
+
+Searches saved subscriptions by a case-insensitive name fragment. The required
+`name` query parameter must contain non-whitespace text. No matches return an
+empty list.
+
+| Parameter | Location | Type | Required |
+| --- | --- | --- | --- |
+| `name` | Query | String | Yes |
+
+Example: `/api/subscriptions/search?name=netflix`
+
+The assistant can perform the same search when answering subscription
+questions.
 
 #### `GET /api/subscriptions/{subscription_id}`
 

@@ -40,6 +40,23 @@ TOOLS = [
     {
         "type": "function",
         "function": {
+            "name": "search_subscriptions_by_name",
+            "description": (
+                "Search saved subscriptions by a name or partial name, "
+                "ignoring case."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {"name": {"type": "string"}},
+                "required": ["name"],
+                "additionalProperties": False,
+            },
+            "strict": True,
+        },
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "get_subscription_by_id",
             "description": "Get one subscription by its UUID.",
             "parameters": {

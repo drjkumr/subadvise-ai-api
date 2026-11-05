@@ -167,6 +167,8 @@ The example writes separate demo data under `data\demo_chat_history` and
   current key as a bearer token.
 - `PATCH /api/subscriptions/{subscription_id}` — partially update a
   subscription; assistant-initiated changes require confirmation.
+- `GET /api/subscriptions/search?name=netflix` — search subscriptions by a
+  case-insensitive name fragment; also available to the assistant.
 - `POST /api/expenses/targets` and `POST /api/expenses` — create a target
   expense or record an actual expense; assistant-initiated changes require
   confirmation.
