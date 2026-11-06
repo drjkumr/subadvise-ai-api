@@ -405,7 +405,7 @@ async def answer_question(
         async with AsyncOpenAI(
             api_key=api_key,
             base_url="https://api.groq.com/openai/v1",
-            timeout=60.0,
+            timeout=600.0,
         ) as groq:
             for _ in range(MAX_TOOL_ROUNDS):
                 completion = await groq.chat.completions.create(

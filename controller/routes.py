@@ -263,6 +263,37 @@ async def get_chat_session(
 
 
 @router.delete(
+    "/api/assistant/sessions/{session_id}",
+    status_code=204,
+    summary="Delete a chat session and its history",
+    tags=["Assistant"],
+)
+async def delete_chat_session(
+    session_id: UUID,
+    request: Request,
+) -> Response:
+    pending_changes = request.app.state.pending_changes
+    async with request.app.state.pending_changes_lock:
+        pending_change = pending_changes.get(session_id)
+        if pending_change and pending_change["status"] == "confirming":
+            raise HTTPException(
+                status_code=409,
+                detail="A confirmed change is still processing.",
+            )
+        try:
+            await to_thread(request.app.state.chat_memory.delete_session, session_id)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=404, detail="Chat session not found.") from exc
+        except (OSError, RuntimeError) as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="Chat history storage is unavailable.",
+            ) from exc
+        pending_changes.pop(session_id, None)
+    return Response(status_code=204)
+
+
+@router.delete(
     "/api/assistant/sessions/{session_id}/history",
     response_model=ClearChatDataResponse,
     summary="Clear a session's chat history",

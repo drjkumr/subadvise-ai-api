@@ -116,3 +116,9 @@ class HybridChatMemory:
         deleted_messages = self.json_store.clear_messages(session_id)
         deleted_context_items = self.vector_store.delete_session(session_id)
         return deleted_messages, deleted_context_items
+
+    def delete_session(self, session_id: UUID) -> None:
+        """Delete a session and its associated semantic context."""
+        self.json_store.get_session(session_id)
+        self.vector_store.delete_session(session_id)
+        self.json_store.delete_session(session_id)

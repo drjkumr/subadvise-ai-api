@@ -273,8 +273,8 @@ For the exact upstream status and response body, call the corresponding proxy
 endpoint directly.
 
 The application makes at most six successive Groq tool-call rounds per
-question. SubAdvise tool calls have a 15-second HTTP timeout; Groq requests
-have a 60-second timeout.
+question. SubAdvise tool calls have a 15-second HTTP timeout; each Groq request
+has a 600-second timeout.
 
 ### `PATCH /api/subscriptions/{subscription_id}`
 

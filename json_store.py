@@ -112,6 +112,11 @@ class JSONChatHistoryManager:
             self._write_session(session)
         return deleted_count
 
+    def delete_session(self, session_id: UUID) -> None:
+        """Delete a session file."""
+        with self._lock:
+            self._session_path(session_id).unlink()
+
     def _session_path(self, session_id: UUID) -> Path:
         return self.storage_dir / f"{session_id}.json"
 
